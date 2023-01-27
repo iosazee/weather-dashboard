@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+}
+
+header {
+    background-image: linear-gradient(to right, #89CFF0, #7393B3, #000080);
+}
+
+.forecast {
+    margin: 15px;
+    padding: 15px 25px;
+    border: 0 solid skyblue;
+    border-radius: 8px;
+    color: #fff;
+    background-color: #739383;
+}
