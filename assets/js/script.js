@@ -75,7 +75,11 @@ btn.addEventListener('click', (e) => {
 
                 const newArr = forecastData.list
                 console.log("newArr: ",newArr)
-                newArr.map((item) => {
+                const selArr = []
+                selArr.push(newArr[0], newArr[9], newArr[18], newArr[26], newArr[36])
+                console.log(selArr)
+
+                selArr.map((item) => {
                     return forecastEl.insertAdjacentHTML(
                                 "beforeend",
                                 `<div class="card forecast" style="background-color: #7393B3; color: #fff">
