@@ -20,3 +20,9 @@ header {
     color: #fff;
     background-color: #739383;
 }
+
+.button {
+    width: 205px;
+    height: 30px;
+    border-radius: 40px;
+}
