@@ -7,6 +7,8 @@ let forecastEl = document.querySelector('#forecast')
 let bodyEl = document.querySelector('body')
 let historyEl = document.querySelector('#history')
 let dataCtn = document.querySelector('#data-ctn')
+let savedHx = JSON.parse(localStorage.getItem('history')) || []
+let storedHx = JSON.parse(localStorage.getItem('history'))
 
 
 
@@ -17,11 +19,10 @@ getData()
 function getData(){
 
 
-    formEl.addEventListener('click', (e) => {
+    btn.addEventListener('click', (e) => {
         e.preventDefault()
         getHx()
         addHx()
-
         if (e.target.matches("button")) {
 
 
@@ -36,19 +37,31 @@ function getData(){
 
             if (cityName.length != 0) {
 
+                todayEl.innerHTML = ""
                 getCurrWeather()
+                forecastEl.innerHTML = ""
                 getForecastWeather()
 
-                document.addEventListener('click', (e) => {
+                historyEl.addEventListener('click', (e) => {
 
                     if(e.target && e.target.id == 'hxbtn'){
-                        getCurrWeather()
-                        getForecastWeather()
+
+                        if (todayEl.hasChildNodes() && forecastEl.hasChildNodes()){
+
+                            todayEl.innerHTML = null
+                            forecastEl.innerHTML = null
+                        } else {
+                            getCurrWeather()
+                            getForecastWeather()
+                        }
+
                     }
                 })
 
                 function getCurrWeather(){
-                    $(todayEl).empty()
+                    todayEl.innerHTML = ""
+                    // $(todayEl).empty()
+
                     fetch(searchUrl)
                         .then(response => response.json())
                         .then(data => {
@@ -80,8 +93,8 @@ function getData(){
                 }
 
                 function getForecastWeather(){
-
-                    $(forecastEl).empty()
+                    forecastEl.innerHTML = ""
+                    // $(forecastEl).empty()
                     fetch(searchUrl)
                     .then(response => response.json())
                     .then(data => {
@@ -130,35 +143,40 @@ function getData(){
                 }
 
 
+                cityName = ""
             } else {
                 alert('Please enter a city')
             }
 
         }
     })
+    formEl.addEventListener('submit', (e) => {
+        formEl.reset()
+    })
 }
 
 
 function addHx () {
-    let Hx = []
-    let cityName = searchInput.value
-    Hx.push(cityName)
-    localStorage.setItem('history', JSON.stringify(Hx))
-    getHx()
+    if (!savedHx.includes(searchInput.value)){
+        let cityName = searchInput.value
+        savedHx.push(cityName)
+        localStorage.setItem('history', JSON.stringify(savedHx))
+    }
+
+
 }
 
 function getHx() {
-
-    $(historyEl).empty()
+   historyEl.childNodes = ""
     let storedHx = JSON.parse(localStorage.getItem('history'))
-    let cityName = searchInput.value
-    if (cityName.length !== 0) {
+    console.log(storedHx)
         if (storedHx) {
 
 
-            storedHx.forEach((cityName) => {
+            for (let i = 0; i < storedHx.length; i++) {
 
-                cityName = searchInput.value
+                let cityName = storedHx[i]
+                console.log(cityName)
                 let hxBtn = document.createElement('button')
                 hxBtn.textContent = cityName
                 hxBtn.classList.add("button")
@@ -166,16 +184,12 @@ function getHx() {
                 hxBtn.classList.add('btn-info')
                 hxBtn.setAttribute('id', 'hxbtn')
                 historyEl.appendChild(hxBtn)
+            }
 
-            })
+
         }
-    }
 
 }
-
-
-
-
 
 
 
